@@ -39,6 +39,14 @@ class DirectoryController extends Controller
         ]);
     }
 
+    public function getUserDirs () {
+        $userId = auth()->id();
+
+        $dirs = Directory::where('user_id', $userId)->get();
+
+        return response()->json($dirs);
+    }
+
     /**
      * Display the specified resource.
      */

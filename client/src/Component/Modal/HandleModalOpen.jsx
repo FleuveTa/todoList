@@ -54,11 +54,11 @@ export default function HandleModalOpen({
       onCancel={handleCancel}
     >
     
-                <Input name="title" onChange={handleChange} />
+                <Input placeholder="Tiltle" name="title" onChange={handleChange} />
            
-                <DatePicker name="date" onChange={handleDateChange} />
+                <DatePicker placeholder="Create date" name="date" onChange={handleDateChange} />
             
-                <TextArea name="description" onChange={handleChange} />
+                <TextArea placeholder="description" name="description" onChange={handleChange} />
             
                 <Select
                   defaultValue="lucy"
@@ -71,10 +71,10 @@ export default function HandleModalOpen({
                     { value: 'disabled', label: 'Disabled', disabled: true },
                   ]}
                 />
-           
-                <Checkbox />
-            
-                <Checkbox />
+                <br />
+                <Checkbox>Mark as important</Checkbox>
+                <br />
+                <Checkbox>Mark as completed!</Checkbox>
     </Modal>
   );
 }

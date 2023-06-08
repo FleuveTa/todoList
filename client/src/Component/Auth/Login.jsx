@@ -3,12 +3,13 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { fetchAPIpostLogin } from "../../api/api";
+import AppContext from "../../context/AppContext";
 
 const { Title } = Typography;
 
 export default function Login() {
   const [loginData, setLoginData] = useState({ email: "", password: "" });
-  //const { user, setUser } = useContext(AppContext);
+  const { user, setUser } = useContext(AppContext);
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -35,9 +36,11 @@ export default function Login() {
       console.log(loginData)
       const res = await fetchAPIpostLogin(loginData);
       const response = await res.json();
-      const { message } = response;
+      const { user : userData ,message } = response;
       if (res.ok) {
         console.log('success')
+        console.log(userData)
+        setUser(userData)
         navigate('/')
       } else {
         messageApi.error(message);

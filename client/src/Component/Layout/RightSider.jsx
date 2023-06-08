@@ -1,15 +1,29 @@
 import React from "react";
-import { Button, Layout, Progress, Avatar } from "antd";
+import { Button, Layout, Progress, Avatar} from "antd";
 import {
-    UserOutlined
+  PoweroffOutlined
   } from '@ant-design/icons';
 import { useState } from "react";
+import { fetchAPIDeleteAll, fetchAPILogout } from "../../api/api";
+import { useNavigate } from "react-router-dom";
 
 const { Sider } = Layout;
 
-export default function RightSider({ items, openModal }) {
+export default function RightSider({openAvatarModal, url, setUrl, userName}) {
+  const defaultUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGYVzWTuDXyCf02RIHia-_X-mnkW_476LQjyc9tZfpOg&s'
+  const navigate = useNavigate()
   const [collapsed, setCollapsed] = useState(false);
-  const url = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTK2nG24AYDm6FOEC7jIfgubO96GbRso2Xshu1f8abSYQ&s'
+  const deleteAll = async () => {
+    console.log(url)
+    const res = await fetchAPIDeleteAll()
+    return res
+  }
+
+  const logOut = async () => {
+    const res = await fetchAPILogout()
+    navigate('/login')
+  };
+
   return (
     <Sider
       width={300}
@@ -34,8 +48,18 @@ export default function RightSider({ items, openModal }) {
           color: "#FFFFFF",
         }}
       >
-        <h2>Hi, User!</h2>
-        <Avatar size={64} src={url} />
+        <h2>Hi, {userName}!</h2>
+        
+        <Avatar size={64} src={url == null ? defaultUrl : url} />
+        <br />
+        <br />
+        <br />
+        <div>
+          <Button onClick={openAvatarModal}>Change avatar</Button>
+          <Button onClick={logOut}>Logout<PoweroffOutlined /></Button>
+        </div>
+        
+        
         <br />
         <br />
         <br />
@@ -54,7 +78,7 @@ export default function RightSider({ items, openModal }) {
             textAlign: "center",
           }}
       >
-        <Button>Delete all data</Button>
+        <Button onClick={deleteAll}>Delete all data</Button>
       </div>
     </Sider>
   );

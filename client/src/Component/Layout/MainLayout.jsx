@@ -1,15 +1,18 @@
-import {Button, Input, Layout, input} from 'antd'
+import {Button, Input, Layout} from 'antd'
 import { Outlet, NavLink } from 'react-router-dom'
 import MySider from './MySider'
-import { useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import {
     FolderAddOutlined
   } from '@ant-design/icons';
-import HandleModalOpen from '../Pages/HandleModalOpen';
-import HandleNewFolder from '../Pages/HandleNewFolder';
+import HandleModalOpen from '../Modal/HandleModalOpen';
+import HandleNewFolder from '../Modal/HandleNewFolder';
 import RightSider from './RightSider';
+import AvatarModal from '../Modal/AvatarModal';
+import AppContext from '../../context/AppContext';
+import { getDirofUser } from '../../api/api';
 
-const {Header, Content, Sider} = Layout
+const {Header, Content} = Layout
 const {Search} = Input
 
 function getItem(label, key, icon, children) {
@@ -22,14 +25,31 @@ function getItem(label, key, icon, children) {
   }
 
 export default function MainLayout () {
-    
+    const [userDir, setUserDir] = useState(null);
+    useEffect(() => {
+        (async () => {
+          const response = await getDirofUser();
+          console.log(response)
+          setUserDir(response);
+        })();
+      }, []);
+
+    const {user} = useContext(AppContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDirModalOpen, setIsDirModalOpen] = useState(false);
+    const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+    const [url, setUrl] = useState(user.img_url)
+
+    
+
     const openModal = () => {
         setIsModalOpen(true)
     }
     const openDirModal = () => {
         setIsDirModalOpen(true)
+    }
+    const openAvatarModal = () => {
+        setIsAvatarModalOpen(true)
     }
 
     const menuItems = [
@@ -64,6 +84,12 @@ export default function MainLayout () {
             isModalOpen={isDirModalOpen}
             setIsModalOpen={setIsDirModalOpen}
              />
+            <AvatarModal
+            isModalOpen={isAvatarModalOpen}
+            setIsModalOpen={setIsAvatarModalOpen}
+            url={url}
+            setUrl={setUrl}
+             />
             <MySider items={menuItems} openModal={openModal} />
             <Layout>
                 <Header
@@ -88,7 +114,7 @@ export default function MainLayout () {
                     <Outlet/>
                 </Content>
             </Layout>
-            <RightSider />
+            <RightSider openAvatarModal={openAvatarModal} url={url} setUrl={setUrl} userName={user.name} />
         </Layout>
     )
 }

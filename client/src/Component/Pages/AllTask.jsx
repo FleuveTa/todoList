@@ -1,4 +1,4 @@
-import { getAllTaskTest } from "../../api/api";
+import { getAllTask } from "../../api/api";
 import TaskCard from "./TaskCard";
 import { useState, useEffect } from "react";
 import { Spin } from "antd";
@@ -10,7 +10,7 @@ export default function AllTask () {
 
     useEffect(() => {
         (async () => {
-          const response = await getAllTaskTest();
+          const response = await getAllTask();
           setTasks(response);
         })();
       }, []);
@@ -32,11 +32,10 @@ export default function AllTask () {
                 <h1>All tasks</h1> 
                 <div className="card">
                     {tasks.map((item) => (
-                        <TaskCard key={item.id} title={item.title} description={item.description} date={item.create_date} />
+                        <TaskCard key={item.id} title={item.title} description={item.description} date={item.create_date} id={item.id} />
                         )
                     )
-                    }
-                    <TaskCard  title='hehe' description='fsfdsfdsfdsfdsdsf' date="2023-05-03 10:16:22" />
+                }
                 </div>   
             </div>
             ) }

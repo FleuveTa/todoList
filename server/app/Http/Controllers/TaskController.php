@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\Directory;
 use App\Http\Requests\UpdateTaskRequest;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Http\Response;
 
 class TaskController extends Controller
@@ -24,6 +25,65 @@ class TaskController extends Controller
         $tasks = Task::where('user_id', $userId)->get();
 
         return response()->json($tasks);
+    }
+
+    public function getTasksByDir ($name) {
+        // $validatedData = $request->validate([
+        //     'directory' => 'required|string',
+        // ]);
+
+        $userId = auth()->id();
+
+        $directory = Directory::where('user_id', $userId)
+                           ->where('name', $name)
+                           ->first();
+
+        $tasks = Task::where('user_id', $userId)->where('directory_id', $directory->id)->get();
+
+        return response()->json($tasks);
+    }
+
+    public function getTasksByCurDate () {
+        $userId = auth()->id();
+        $tasks = Task::where('user_id', $userId)
+                    ->whereDate('created_at', Carbon::today())->get();
+                    
+        return response()->json($tasks);
+    }
+
+    public function getTasksImportant () {
+        $userId = auth()->id();
+        $tasks = Task::where('user_id', $userId)
+                    ->where('important', 1)->get();
+                    
+        return response()->json($tasks);
+    }
+
+    public function getTasksCompleted () {
+        $userId = auth()->id();
+        $tasks = Task::where('user_id', $userId)
+                    ->where('completed', 1)->get();
+                    
+        return response()->json($tasks);
+    }
+
+    public function getTasksUnCompleted () {
+        $userId = auth()->id();
+        $tasks = Task::where('user_id', $userId)
+                    ->where('completed', 0)->get();
+                    
+        return response()->json($tasks);
+    }
+
+    public function deleteTaskById (Request $request) {
+
+        $taskId = $request->id;
+        
+        Task::where('id', $taskId)->delete();
+                    
+        return response()->json([
+            'messsage' => 'Delete successfully'
+        ]);
     }
 
     /**
