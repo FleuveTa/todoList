@@ -13,6 +13,7 @@ export default function RightSider({openAvatarModal, url, setUrl, userName}) {
   const defaultUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGYVzWTuDXyCf02RIHia-_X-mnkW_476LQjyc9tZfpOg&s'
   const navigate = useNavigate()
   const [collapsed, setCollapsed] = useState(false);
+  
   const deleteAll = async () => {
     console.log(url)
     const res = await fetchAPIDeleteAll()
@@ -22,6 +23,7 @@ export default function RightSider({openAvatarModal, url, setUrl, userName}) {
   const logOut = async () => {
     const res = await fetchAPILogout()
     navigate('/login')
+    return res
   };
 
   return (

@@ -15,6 +15,11 @@ export default function UncompletedTask () {
 
     console.log(tasks)
 
+    const handleDelete = (id) => {
+        const updatedCards = tasks.filter((task) => task.id !== id);
+        setTasks(updatedCards);
+      };
+
 
     return (
         <div
@@ -30,7 +35,7 @@ export default function UncompletedTask () {
                 <h1>Uncompleted tasks</h1> 
                 <div className="card">
                     {tasks.map((item) => (
-                        <TaskCard key={item.id} title={item.title} description={item.description} date={item.create_date} id={item.id} />
+                        <TaskCard key={item.id} title={item.title} description={item.description} date={item.create_date} id={item.id} onDelete={handleDelete} important={item.important} completed={item.completed} />
                         )
                     )
                 }

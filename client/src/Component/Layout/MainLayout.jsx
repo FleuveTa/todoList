@@ -1,19 +1,20 @@
 import {Button, Input, Layout} from 'antd'
 import { Outlet, NavLink } from 'react-router-dom'
 import MySider from './MySider'
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, createContext } from 'react';
 import {
-    FolderAddOutlined
+    FolderAddOutlined, ThunderboltFilled
   } from '@ant-design/icons';
 import HandleModalOpen from '../Modal/HandleModalOpen';
 import HandleNewFolder from '../Modal/HandleNewFolder';
 import RightSider from './RightSider';
 import AvatarModal from '../Modal/AvatarModal';
 import AppContext from '../../context/AppContext';
-import { getDirofUser } from '../../api/api';
+import { getAllTask, getDirofUser } from '../../api/api';
 
 const {Header, Content} = Layout
 const {Search} = Input
+export const TaskContext = createContext()
 
 function getItem(label, key, icon, children) {
     return {
@@ -25,12 +26,26 @@ function getItem(label, key, icon, children) {
   }
 
 export default function MainLayout () {
-    const [userDir, setUserDir] = useState(null);
+    const [userDir, setUserDir] = useState([]);
+    const [tasks, setTasks] = useState([]);
+
+    const [modalData, setModalData] = useState({
+        'title' : '',
+        'description' : '',
+        'date' : null,
+        'directory' : '',
+        'completed' : 0,
+        'important' : 0,
+      });
+
     useEffect(() => {
         (async () => {
           const response = await getDirofUser();
+          const response2 = await getAllTask();
           console.log(response)
+          console.log(response2)
           setUserDir(response);
+          setTasks(response2)
         })();
       }, []);
 
@@ -40,7 +55,11 @@ export default function MainLayout () {
     const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
     const [url, setUrl] = useState(user.img_url)
 
-    
+    const addTask = (newTask) => {
+        console.log('trigged')
+        setTasks([...tasks, newTask]);
+        console.log(tasks)
+      };
 
     const openModal = () => {
         setIsModalOpen(true)
@@ -59,27 +78,24 @@ export default function MainLayout () {
         getItem(<NavLink to="/completed">View completed task</NavLink>,"4"),
         getItem(<NavLink to="/uncompleted">View uncompleted task</NavLink>,"5"),
         getItem("Quản lý", "sub2", null, [
-            getItem(
-            <NavLink to="/dir/centre-management">Danh sách trung tâm</NavLink>,
-            "6"
-            ),
-            getItem(
-            <NavLink to="/dir/registry-management">Danh sách đăng kiểm</NavLink>,
-            "7"
-            ),
-            getItem(
-            <Button onClick={openDirModal}><FolderAddOutlined /> New</Button>,"8")
         ]),
         ];
 
+        for (let i=0; i<userDir.length; i++) {
+            menuItems[5].children.push(getItem(<NavLink to={`/dir/${userDir[i].name}`}>Thư mục {userDir[i].name}</NavLink>,`${6+i}`))
+        }
+        
+
     return (
-        <Layout>
+        <TaskContext.Provider value={{ tasks, addTask }}>
+            <Layout>
             <HandleModalOpen
             isModalOpen={isModalOpen}
             setIsModalOpen={setIsModalOpen}
-            //registerData={registerData}
-            //setRegisterData={setRegisterData}
-          />
+            modalData={modalData}
+            setModalData={setModalData}
+            userDir={userDir}
+             />
             <HandleNewFolder
             isModalOpen={isDirModalOpen}
             setIsModalOpen={setIsDirModalOpen}
@@ -111,10 +127,13 @@ export default function MainLayout () {
                     />
                 </Header>
                 <Content>
-                    <Outlet/>
+                    
+                        <Outlet/>
                 </Content>
             </Layout>
             <RightSider openAvatarModal={openAvatarModal} url={url} setUrl={setUrl} userName={user.name} />
         </Layout>
+        </TaskContext.Provider>
+        
     )
 }

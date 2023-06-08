@@ -19,7 +19,71 @@ class TaskController extends Controller
         $tasks = Task::all();
         return response()->json($tasks);
     }
-
+    /**
+     * Get all tasks of current user
+     * @OA\Get (
+     *     path="/api/alltasks",
+     *     tags={"Tasks"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="success",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="id",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="user_id",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="directory_id",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="important",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="completed",
+     *                         type="number",
+     *                         example="0"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="title",
+     *                         type="string",
+     *                         example="example title"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="description",
+     *                         type="string",
+     *                         example="example content"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="updated_at",
+     *                         type="string",
+     *                         example="2021-12-11T09:25:53.000000Z"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="created_at",
+     *                         type="string",
+     *                         example="2021-12-11T09:25:53.000000Z"
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     */
+ 
     public function getTasksById () {
         $userId = auth()->id();
         $tasks = Task::where('user_id', $userId)->get();
@@ -28,10 +92,7 @@ class TaskController extends Controller
     }
 
     public function getTasksByDir ($name) {
-        // $validatedData = $request->validate([
-        //     'directory' => 'required|string',
-        // ]);
-
+   
         $userId = auth()->id();
 
         $directory = Directory::where('user_id', $userId)
@@ -46,7 +107,7 @@ class TaskController extends Controller
     public function getTasksByCurDate () {
         $userId = auth()->id();
         $tasks = Task::where('user_id', $userId)
-                    ->whereDate('created_at', Carbon::today())->get();
+                    ->whereDate('created_date', Carbon::today())->get();
                     
         return response()->json($tasks);
     }

@@ -15,7 +15,11 @@ export default function AllTask () {
         })();
       }, []);
 
-    console.log(tasks)
+
+    const handleDelete = (id) => {
+        const updatedCards = tasks.filter((task) => task.id !== id);
+        setTasks(updatedCards);
+      };
 
 
     return (
@@ -28,11 +32,11 @@ export default function AllTask () {
             (<Spin />) 
             : 
             (
-            <div className="card-container">
-                <h1>All tasks</h1> 
-                <div className="card">
+            <div className="card-container" >
+                <h2>All tasks</h2> 
+                <div className="card" style={{ display: 'flex', flexWrap: 'wrap' }}>
                     {tasks.map((item) => (
-                        <TaskCard key={item.id} title={item.title} description={item.description} date={item.create_date} id={item.id} />
+                        <TaskCard key={item.id} title={item.title} description={item.description} date={item.create_date} id={item.id} onDelete={handleDelete} important={item.important} completed={item.completed} />
                         )
                     )
                 }

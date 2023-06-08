@@ -65,6 +65,20 @@ export const getUnCompletedTask= async () => {
     return data
 }
 
+export const addNewTaskAPI = async (task_data) => {
+    const myObject = JSON.stringify(task_data)
+    const res = await fetch(`${baseUrl}/api/addtask`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+          },
+        credentials : "include",
+        body : myObject
+    })
+    const response = await res.json()
+    return response
+}
+
 export const getTaskByDir  = async (name) => {
     const res = await fetch(`${baseUrl}/api/taskbydir/${name}`, {
         method: "GET",
@@ -104,7 +118,8 @@ export const changeUrlAPI = async (img_url) => {
 }
 
 export const fetchAPIDeleteTask = async (task_id) => {
-    const data = JSON.stringify(task_id)
+    const myObject = {"id" : task_id}
+    const data = JSON.stringify(myObject)
     console.log(data)
     const res = fetch(`${baseUrl}/api/delete-taskbyid`, {
         method: "DELETE",
@@ -136,6 +151,7 @@ export const fetchAPILogout = async () => {
         headers: {
             "Content-Type": "application/json",
           },
+        credentials : "include"
     });
     return res
 }

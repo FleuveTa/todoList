@@ -10,10 +10,16 @@ export default function TodayTask () {
         (async () => {
           const response = await getTodayTask();
           setTasks(response);
+          console.log(response)
         })();
       }, []);
 
     console.log(tasks)
+
+    const handleDelete = (id) => {
+        const updatedCards = tasks.filter((task) => task.id !== id);
+        setTasks(updatedCards);
+      };
 
 
     return (
@@ -30,7 +36,7 @@ export default function TodayTask () {
                 <h1>Today tasks</h1> 
                 <div className="card">
                     {tasks.map((item) => (
-                        <TaskCard key={item.id} title={item.title} description={item.description} date={item.create_date} id={item.id} />
+                        <TaskCard key={item.id} title={item.title} description={item.description} date={item.create_date} id={item.id} onDelete={handleDelete} important={item.important} completed={item.completed} />
                         )
                     )
                 }

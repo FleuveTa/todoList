@@ -1,4 +1,4 @@
-import {Card, Button, Popconfirm} from 'antd'
+import {Card, Button, Popconfirm, Switch} from 'antd'
 import moment from 'moment'
 import { NavLink } from 'react-router-dom'
 import {
@@ -10,10 +10,10 @@ import {
 import { useState } from 'react'
 import { fetchAPIDeleteTask } from '../../api/api';
 
-export default function TaskCard ({title, description, date, id }) {
-    const [buttonContent, setButtonContent] = useState('Completed')
-    const [buttonContentColor, setButtonContentColor] = useState('green')
-    const [important, setimportant] = useState(<StarOutlined />)
+export default function TaskCard ({title, description, date, id, onDelete, important, completed }) {
+    const [buttonContent, setButtonContent] = useState(completed === 1 ? 'Completed' : 'UnCompleted')
+    const [buttonContentColor, setButtonContentColor] = useState(completed === 1 ? 'green' : 'red')
+    const [importantCheck, setImportantCheck] = useState(important === 1 ? true : false)
 
     const completeTask = () => {
         if (buttonContent === 'Completed') {
@@ -26,34 +26,47 @@ export default function TaskCard ({title, description, date, id }) {
         } 
     }
 
-    const switchImportant = () => {
-        if (important === <StarOutlined /> ) {
-            setimportant(<StarFilled />)
-        } 
-        else {
-            setimportant(<StarOutlined />)
-        } 
-    }
 
     const deleteTask = async (task_id) => {
         const res = await fetchAPIDeleteTask(task_id)
         const response = await res.json()
+        onDelete(task_id)
         return response
     }
 
+    const onImChange = (checked) => {
+        setImportantCheck(!importantCheck)
+      };
+
     return (
+        
         <Card
             title={title}
-            extra={<NavLink to={`/dir/giang`}><Button>Giang</Button></NavLink>}
+            //extra={<NavLink to={`/dir/giang`}><Button>Giang</Button></NavLink>}
             style={{
-            width: 300,
-            }}  
+            width: 290,
+            background: '#D4CACA', // Change the background color here
+            borderColor: '#1A1818',
+            }}
+            actions={[
+                <Popconfirm
+                  key="delete"
+                  title="Delete task"
+                  description="Are you sure?"
+                  onConfirm={() => deleteTask(id)}
+                >
+                  <DeleteOutlined />
+                </Popconfirm>,
+                //<Button>Edit</Button>
+              ]}  
         >
             <p>{description}</p>
             <p>{moment(date).format('YYYY-MM-DD')}</p>
             <Button className='complete' style={{ background: buttonContentColor, borderColor: "yellow" }} onClick={completeTask}>{buttonContent}</Button>
-            <Button onClick={switchImportant}>{important}</Button>
-            <Popconfirm title='Delete task' description='Are you sure' onConfirm={()=>deleteTask(id)}><DeleteOutlined /></Popconfirm>
+            {/* <br />
+            <br /> */}
+            <Switch style={{marginLeft: 15}} checked={importantCheck} onChange={onImChange} />
+            <label>Important</label>
         </Card>
     )
 

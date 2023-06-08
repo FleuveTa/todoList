@@ -14,6 +14,11 @@ export default function DirView () {
           setTasks(response);
         })();
       }, [name]);
+
+      const handleDelete = (id) => {
+        const updatedCards = tasks.filter((task) => task.id !== id);
+        setTasks(updatedCards);
+      };
     
       return (
         <div
@@ -26,10 +31,10 @@ export default function DirView () {
             : 
             (
             <div className="card-container">
-                <h1>Important tasks</h1> 
+                <h2>Directory {name} tasks</h2> 
                 <div className="card">
                     {tasks.map((item) => (
-                        <TaskCard key={item.id} title={item.title} description={item.description} date={item.create_date} id={item.id} />
+                        <TaskCard key={item.id} title={item.title} description={item.description} date={item.create_date} id={item.id} onDelete={handleDelete} important={item.important} completed={item.completed} />
                         )
                     )
                 }

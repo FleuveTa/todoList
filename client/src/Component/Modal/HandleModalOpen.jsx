@@ -1,25 +1,26 @@
 import { Modal, message, Form, Input, Checkbox, DatePicker, Select } from "antd";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { addNewTaskAPI } from "../../api/api";
 
 const {TextArea} = Input
 export default function HandleModalOpen({
   isModalOpen,
   setIsModalOpen,
+  modalData,
+  setModalData,
+  userDir
 }) {
-  const [modalData, setModalData] = useState({
-    'title' : '',
-    'description' : '',
-    'date' : null,
-    'directory' : '',
-    'completed' : 0,
-    'important' : 0,
-  });
-  const [messageApi, contextHolder] = message.useMessage();
 
+  const options = []
+  for (let i=0; i<userDir.length; i++) {
+    options.push({ value: userDir[i].name, label: userDir[i].name })
+  }
+  
   const handleOk = async () => {
     setIsModalOpen(false)
-    console.log(modalData)
+    const res = await addNewTaskAPI(modalData)
   };
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -33,8 +34,18 @@ export default function HandleModalOpen({
     console.log(modalData)
   };
 
-  const handleCheckChange = (e) => {
-    console.log(e)
+  const handleCheckChange1 = (e) => {
+    setModalData({
+      ...modalData,
+      ['important']: e.target.checked === true ? 1 : 0,
+    });
+  }
+
+  const handleCheckChange2 = (e) => {
+    setModalData({
+      ...modalData,
+      ['completed']: e.target.checked === true ? 1 : 0,
+    });
   }
 
   const handleDateChange = (date, dateString) => {
@@ -42,6 +53,13 @@ export default function HandleModalOpen({
     setModalData({
       ...modalData,
       ['date']: dateString,
+    });
+  };
+
+  const handleSelectChange = (value) => {
+    setModalData({
+      ...modalData,
+      ['directory']: value,
     });
   };
   
@@ -60,21 +78,17 @@ export default function HandleModalOpen({
             
                 <TextArea placeholder="description" name="description" onChange={handleChange} />
             
+                <label>Choose directory</label>
                 <Select
-                  defaultValue="lucy"
-                  style={{ width: 120 }}
-                  onChange={handleChange}
-                  options={[
-                    { value: 'jack', label: 'Jack' },
-                    { value: 'lucy', label: 'Lucy' },
-                    { value: 'Yiminghe', label: 'yiminghe' },
-                    { value: 'disabled', label: 'Disabled', disabled: true },
-                  ]}
+                  defaultValue={`${userDir[0].name}`}
+                  style={{ width: 150 }}
+                  onChange={handleSelectChange}
+                  options={options}
                 />
                 <br />
-                <Checkbox>Mark as important</Checkbox>
+                <Checkbox onChange={handleCheckChange1}>Mark as important</Checkbox>
                 <br />
-                <Checkbox>Mark as completed!</Checkbox>
+                <Checkbox onChange={handleCheckChange2}>Mark as completed!</Checkbox>
     </Modal>
   );
 }
