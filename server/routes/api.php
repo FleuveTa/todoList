@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DirectoryController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,4 +24,8 @@ Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', [AuthController::class, 'user']);
     Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('alltasks', [TaskController::class, 'getTasksById']);
+    Route::post('addtask', [TaskController::class, 'store']);
+    Route::post('adddir', [DirectoryController::class, 'store']);
+    Route::delete('delete-all', [UserController::class, 'deleteAllDirAndTask']);
 });

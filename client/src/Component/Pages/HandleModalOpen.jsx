@@ -1,4 +1,4 @@
-import { Modal, message, Form, Input, Radio } from "antd";
+import { Modal, message, Form, Input, Checkbox, DatePicker, Select } from "antd";
 import React, { useState } from "react";
 
 const {TextArea} = Input
@@ -6,22 +6,45 @@ export default function HandleModalOpen({
   isModalOpen,
   setIsModalOpen,
 }) {
-  const [modalCentreData, setModalCentreData] = useState(null);
+  const [modalData, setModalData] = useState({
+    'title' : '',
+    'description' : '',
+    'date' : null,
+    'directory' : '',
+    'completed' : 0,
+    'important' : 0,
+  });
   const [messageApi, contextHolder] = message.useMessage();
 
   const handleOk = async () => {
     setIsModalOpen(false)
+    console.log(modalData)
   };
   const handleCancel = () => {
     setIsModalOpen(false);
   };
 
   const handleChange = (e) => {
-    setModalCentreData({
-      ...modalCentreData,
+    console.log(e.target.name)
+    setModalData({
+      ...modalData,
       [e.target.name]: e.target.value,
     });
+    console.log(modalData)
   };
+
+  const handleCheckChange = (e) => {
+    console.log(e)
+  }
+
+  const handleDateChange = (date, dateString) => {
+    console.log(dateString)
+    setModalData({
+      ...modalData,
+      ['date']: dateString,
+    });
+  };
+  
 
   return (
     <Modal
@@ -30,48 +53,28 @@ export default function HandleModalOpen({
       onOk={handleOk}
       onCancel={handleCancel}
     >
-        <Form
-            name="task_form"
-            //onFinish={onFinish}
-            style={{
-            maxWidth: 600,
-            }}
-        >
-            <Form.Item
-            name={['user', 'name']}
-            label="Title"
-            rules={[
-                {
-                required: true,
-                },
-            ]}
-            >
-                <Input />
-            </Form.Item>
-            <Form.Item
-            name={['user', 'name']}
-            label="Description"
-            rules={[
-                {
-                required: true,
-                },
-            ]}
-            >
-                <TextArea />
-            </Form.Item>
-            <Form.Item
-            name={['user', 'name']}
-            label="Name"
-            rules={[
-                {
-                required: true,
-                },
-            ]}
-            >
-                <Input />
-            </Form.Item>
-        </Form>
-      
+    
+                <Input name="title" onChange={handleChange} />
+           
+                <DatePicker name="date" onChange={handleDateChange} />
+            
+                <TextArea name="description" onChange={handleChange} />
+            
+                <Select
+                  defaultValue="lucy"
+                  style={{ width: 120 }}
+                  onChange={handleChange}
+                  options={[
+                    { value: 'jack', label: 'Jack' },
+                    { value: 'lucy', label: 'Lucy' },
+                    { value: 'Yiminghe', label: 'yiminghe' },
+                    { value: 'disabled', label: 'Disabled', disabled: true },
+                  ]}
+                />
+           
+                <Checkbox />
+            
+                <Checkbox />
     </Modal>
   );
 }

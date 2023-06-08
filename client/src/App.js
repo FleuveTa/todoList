@@ -11,6 +11,7 @@ import CompletedTask from './Component/Pages/CompletedTask';
 import UnCompletedTask from './Component/Pages/UnCompletedTask';
 import DirView from './Component/Pages/DirView';
 import Login from './Component/Auth/Login';
+import Register from './Component/Auth/Register';
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
       </Route>
 
       <Route path='/login' element={<Login />}/>
+      <Route path='/register' element={<Register />}/>
 
     </Routes>
   );

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Directory;
-use App\Http\Requests\StoreDirectoryRequest;
 use App\Http\Requests\UpdateDirectoryRequest;
+use Illuminate\Http\Request;
 
 class DirectoryController extends Controller
 {
@@ -17,19 +17,26 @@ class DirectoryController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreDirectoryRequest $request)
+    public function store(Request $request)
     {
-        //
+        $validateData = $request->validate([
+            'name' => 'required|string'
+        ]);
+
+        $userId = auth()->id();
+
+        $model = new Directory();
+
+        $model->name = $validateData['name'];
+        $model->user_id = $userId;
+
+        $model->save();
+
+        return response()->json([
+            'message' => 'Create new directory successfully'
+        ]);
     }
 
     /**

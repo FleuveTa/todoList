@@ -1,44 +1,44 @@
 import { Button, Input, Space, Typography, message } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { fetchAPIpostLogin } from "../../api/api";
+import { fetchAPIRegister } from "../../api/api";
 
 const { Title } = Typography;
 
-export default function Login() {
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
+export default function Register() {
+  const [registerData, setRegisterData] = useState({ name: "", email: "", password: "" });
   //const { user, setUser } = useContext(AppContext);
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
 
   const handleChange = (e) => {
-    setLoginData({ ...loginData, [e.target.name]: e.target.value });
+    setRegisterData({ ...registerData, [e.target.name]: e.target.value });
   };
 
   const handleKeyUp = (e) => {
     if (e.key == "Enter") {
-      handleLogin();
+      handleRegister();
     }
   };
 
   const inputCheck = () => {
-    if (loginData.email == "" || loginData.password == "") {
+    if (registerData.email == "" || registerData.password == "") {
       messageApi.error("Xin nhập đầy đủ thông tin.")
       return false;
     }
     return true;
   };
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     try {
-      console.log(loginData)
-      const res = await fetchAPIpostLogin(loginData);
+      console.log(registerData)
+      const res = await fetchAPIRegister(registerData);
       const response = await res.json();
       const { message } = response;
-      if (res.ok) {
-        console.log('success')
-        navigate('/')
+      console.log(response)
+      if (message === 'Register successfully') {
+        messageApi.success(message)
       } else {
         messageApi.error(message);
       }
@@ -48,12 +48,7 @@ export default function Login() {
   };
 
   return (
-    <div id="loginDiv"
-      style={{
-        backgroundImage : `url(https://startinfinity.s3.us-east-2.amazonaws.com/production/blog/post/5/main/1SvzKctRCi8bwB0QPdOZkBP0pRhsOqZpl0wjs6y0.png)`,
-        height : "100vh"
-      }}
-    >
+    <div id="loginDiv">
       {contextHolder}
       <Space
         direction="vertical"
@@ -66,12 +61,21 @@ export default function Login() {
           paddingTop: 100,
         }}
       >
-        <Title style={{ color : 'black'}}>LOGIN TO-DO APP</Title>
+        <Title>Đăng ký tài khoản mới</Title>
+
+        <Input
+          size="large"
+          placeholder="Username"
+          prefix={<UserOutlined />}
+          name="name"
+          onChange={handleChange}
+          onKeyUp={handleKeyUp}
+        />
 
         <Input
           size="large"
           placeholder="Email"
-          prefix={<UserOutlined />}
+          prefix={<MailOutlined />}
           name="email"
           onChange={handleChange}
           onKeyUp={handleKeyUp}
@@ -90,12 +94,12 @@ export default function Login() {
         <Button
           size="large"
           type="primary"
-          //style={{ float: "center" }}
-          onClick={handleLogin}
+          style={{ float: "right" }}
+          onClick={handleRegister}
         >
-          Đăng nhập
+          Đăng ký
         </Button>
-        <NavLink to='/register'>Don't have an account? Go to register</NavLink>
+        <NavLink to='/login'>Tới trang đăng nhập</NavLink>
       </Space>
     </div>
   );
