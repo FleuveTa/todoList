@@ -237,7 +237,7 @@ class TaskController extends Controller
     public function getTasksByCurDate () {
         $userId = auth()->id();
         $tasks = Task::where('user_id', $userId)
-                    ->whereDate('created_date', Carbon::today())->get();
+                    ->whereDate('created_at', Carbon::today())->get();
                     
         return response()->json($tasks);
     }
@@ -611,9 +611,16 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTaskRequest $request, Task $task)
-    {
-        //
+    public function update(Request $request, $id) {
+        $task = Task::where('id', $id);
+
+        $task->fill($request->all());
+        
+        $task->save();
+                    
+        return response()->json([
+            'messsage' => 'Update successfully'
+        ]);
     }
 
     /**

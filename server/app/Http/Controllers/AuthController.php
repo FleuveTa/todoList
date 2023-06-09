@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Directory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -108,6 +109,11 @@ class AuthController extends Controller
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password'))
+        ]);
+
+        Directory::create([
+            'name' => "main",
+            'user_id' => $user->id
         ]);
 
         return response([

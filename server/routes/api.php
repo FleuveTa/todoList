@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('uncompleted', [TaskController::class, 'getTasksUnCompleted']);
     Route::get('taskbydir/{name}', [TaskController::class, 'getTasksByDir']);
     Route::post('addtask', [TaskController::class, 'store']);
+    Route::put('edittask/{id}', [TaskController::class, 'update']);
     Route::delete('delete-taskbyid', [TaskController::class, 'deleteTaskById']);
 
     Route::post('adddir', [DirectoryController::class, 'store']);

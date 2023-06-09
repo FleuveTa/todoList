@@ -8,22 +8,27 @@ import {
     } from '@ant-design/icons';
 
 import { useState } from 'react'
-import { fetchAPIDeleteTask } from '../../api/api';
+import { changeTaskStateAPI, fetchAPIDeleteTask } from '../../api/api';
 
 export default function TaskCard ({title, description, date, id, onDelete, important, completed }) {
+    const [boolState, setBoolState] = useState({"important" : important, "completed" : completed})
     const [buttonContent, setButtonContent] = useState(completed === 1 ? 'Completed' : 'UnCompleted')
     const [buttonContentColor, setButtonContentColor] = useState(completed === 1 ? 'green' : 'red')
     const [importantCheck, setImportantCheck] = useState(important === 1 ? true : false)
 
-    const completeTask = () => {
+    const completeTask = async () => {
         if (buttonContent === 'Completed') {
             setButtonContent('UnCompleted')
             setButtonContentColor('red')
+            setBoolState({...boolState, "completed" : 0})
         } 
         else {
             setButtonContent('Completed')
             setButtonContentColor('green')
+            setBoolState({...boolState, "completed" : 1})
         } 
+        console.log(boolState)
+        const res = await changeTaskStateAPI(boolState, id)
     }
 
 
@@ -34,9 +39,16 @@ export default function TaskCard ({title, description, date, id, onDelete, impor
         return response
     }
 
-    const onImChange = (checked) => {
+    const onImChange = async (checked) => {
         setImportantCheck(!importantCheck)
+        setBoolState({...boolState, "important" : importantCheck === true ? 1 : 0})
+        const res = await changeTaskStateAPI(boolState, id)
       };
+
+
+    const updateState = async () => {
+        const res = await changeTaskStateAPI(boolState, id)
+    }
 
     return (
         
@@ -62,7 +74,7 @@ export default function TaskCard ({title, description, date, id, onDelete, impor
         >
             <p>{description}</p>
             <p>{moment(date).format('YYYY-MM-DD')}</p>
-            <Button className='complete' style={{ background: buttonContentColor, borderColor: "yellow" }} onClick={completeTask}>{buttonContent}</Button>
+            <Button className='complete' style={{ background: buttonContentColor, borderColor: "yellow" }} onClick={()=>completeTask()}>{buttonContent}</Button>
             {/* <br />
             <br /> */}
             <Switch style={{marginLeft: 15}} checked={importantCheck} onChange={onImChange} />

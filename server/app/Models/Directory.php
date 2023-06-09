@@ -11,6 +11,11 @@ class Directory extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'user_id'
+    ];
+
     public function customer() :BelongsTo
     {
         return $this->belongsTo(User::class);

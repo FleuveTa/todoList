@@ -117,6 +117,19 @@ export const changeUrlAPI = async (img_url) => {
     return res
 }
 
+export const changeTaskStateAPI = async (stateData, id) => {
+    const data = JSON.stringify(stateData)
+    const res = fetch(`${baseUrl}/api/edittask/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+          },
+        credentials : "include",
+        body: data,
+    })
+    return res
+}
+
 export const fetchAPIDeleteTask = async (task_id) => {
     const myObject = {"id" : task_id}
     const data = JSON.stringify(myObject)

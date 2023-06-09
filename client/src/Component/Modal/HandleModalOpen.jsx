@@ -1,4 +1,4 @@
-import { Modal, message, Form, Input, Checkbox, DatePicker, Select } from "antd";
+import { Modal, message, Form, Input, Checkbox, DatePicker, Select, Spin } from "antd";
 import React, { useState, useContext } from "react";
 import { addNewTaskAPI } from "../../api/api";
 
@@ -65,30 +65,43 @@ export default function HandleModalOpen({
   
 
   return (
-    <Modal
-      title="Add new task"
-      open={isModalOpen}
-      onOk={handleOk}
-      onCancel={handleCancel}
-    >
-    
-                <Input placeholder="Tiltle" name="title" onChange={handleChange} />
-           
-                <DatePicker placeholder="Create date" name="date" onChange={handleDateChange} />
+    <div
+            style={{
+                marginLeft: 20,
+            }}
+        >
+            {!userDir ? 
+            (<Spin />) 
+            : 
+            (
+              <Modal
+              title="Add new task"
+              open={isModalOpen}
+              onOk={handleOk}
+              onCancel={handleCancel}
+            >
             
-                <TextArea placeholder="description" name="description" onChange={handleChange} />
+                        <Input placeholder="Tiltle" name="title" onChange={handleChange} />
+                   
+                        <DatePicker placeholder="Create date" name="date" onChange={handleDateChange} />
+                    
+                        <TextArea placeholder="description" name="description" onChange={handleChange} />
+                    
+                        <label>Choose directory</label>
+                        <Select
+                          //defaultValue={`${userDir[0].name}`}
+                          style={{ width: 150 }}
+                          onChange={handleSelectChange}
+                          options={options}
+                        />
+                        <br />
+                        <Checkbox onChange={handleCheckChange1}>Mark as important</Checkbox>
+                        <br />
+                        <Checkbox onChange={handleCheckChange2}>Mark as completed!</Checkbox>
+            </Modal>
+            ) }
             
-                <label>Choose directory</label>
-                <Select
-                  defaultValue={`${userDir[0].name}`}
-                  style={{ width: 150 }}
-                  onChange={handleSelectChange}
-                  options={options}
-                />
-                <br />
-                <Checkbox onChange={handleCheckChange1}>Mark as important</Checkbox>
-                <br />
-                <Checkbox onChange={handleCheckChange2}>Mark as completed!</Checkbox>
-    </Modal>
+        </div>
+
   );
 }
