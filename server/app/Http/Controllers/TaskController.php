@@ -91,6 +91,71 @@ class TaskController extends Controller
         return response()->json($tasks);
     }
 
+    /**
+     * Get all tasks in request directory 
+     * @OA\Get (
+     *     path="/api/taskbydir/{name}",
+     *     tags={"Tasks"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="success",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="id",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="user_id",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="directory_id",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="important",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="completed",
+     *                         type="number",
+     *                         example="0"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="title",
+     *                         type="string",
+     *                         example="example title"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="description",
+     *                         type="string",
+     *                         example="example content"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="updated_at",
+     *                         type="string",
+     *                         example="2021-12-11T09:25:53.000000Z"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="created_at",
+     *                         type="string",
+     *                         example="2021-12-11T09:25:53.000000Z"
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     */
+
     public function getTasksByDir ($name) {
    
         $userId = auth()->id();
@@ -104,6 +169,71 @@ class TaskController extends Controller
         return response()->json($tasks);
     }
 
+    /**
+     * Get all tasks in request date 
+     * @OA\Get (
+     *     path="/api/todaytasks",
+     *     tags={"Tasks"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="success",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="id",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="user_id",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="directory_id",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="important",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="completed",
+     *                         type="number",
+     *                         example="0"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="title",
+     *                         type="string",
+     *                         example="example title"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="description",
+     *                         type="string",
+     *                         example="example content"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="updated_at",
+     *                         type="string",
+     *                         example="2021-12-11T09:25:53.000000Z"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="created_at",
+     *                         type="string",
+     *                         example="2021-12-11T09:25:53.000000Z"
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     */
+
     public function getTasksByCurDate () {
         $userId = auth()->id();
         $tasks = Task::where('user_id', $userId)
@@ -111,6 +241,71 @@ class TaskController extends Controller
                     
         return response()->json($tasks);
     }
+
+    /**
+     * Get important tasks  
+     * @OA\Get (
+     *     path="/api/important",
+     *     tags={"Tasks"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="success",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="id",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="user_id",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="directory_id",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="important",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="completed",
+     *                         type="number",
+     *                         example="0"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="title",
+     *                         type="string",
+     *                         example="example title"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="description",
+     *                         type="string",
+     *                         example="example content"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="updated_at",
+     *                         type="string",
+     *                         example="2021-12-11T09:25:53.000000Z"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="created_at",
+     *                         type="string",
+     *                         example="2021-12-11T09:25:53.000000Z"
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     */
 
     public function getTasksImportant () {
         $userId = auth()->id();
@@ -120,6 +315,71 @@ class TaskController extends Controller
         return response()->json($tasks);
     }
 
+    /**
+     * Get completed tasks 
+     * @OA\Get (
+     *     path="/api/completed",
+     *     tags={"Tasks"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="success",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="id",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="user_id",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="directory_id",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="important",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="completed",
+     *                         type="number",
+     *                         example="0"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="title",
+     *                         type="string",
+     *                         example="example title"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="description",
+     *                         type="string",
+     *                         example="example content"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="updated_at",
+     *                         type="string",
+     *                         example="2021-12-11T09:25:53.000000Z"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="created_at",
+     *                         type="string",
+     *                         example="2021-12-11T09:25:53.000000Z"
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     */
+
     public function getTasksCompleted () {
         $userId = auth()->id();
         $tasks = Task::where('user_id', $userId)
@@ -128,6 +388,71 @@ class TaskController extends Controller
         return response()->json($tasks);
     }
 
+    /**
+     * Get uncompleted tasks  
+     * @OA\Get (
+     *     path="/api/uncompleted",
+     *     tags={"Tasks"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="success",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="id",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="user_id",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="directory_id",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="important",
+     *                         type="number",
+     *                         example="1"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="completed",
+     *                         type="number",
+     *                         example="0"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="title",
+     *                         type="string",
+     *                         example="example title"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="description",
+     *                         type="string",
+     *                         example="example content"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="updated_at",
+     *                         type="string",
+     *                         example="2021-12-11T09:25:53.000000Z"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="created_at",
+     *                         type="string",
+     *                         example="2021-12-11T09:25:53.000000Z"
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     */
+
     public function getTasksUnCompleted () {
         $userId = auth()->id();
         $tasks = Task::where('user_id', $userId)
@@ -135,6 +460,37 @@ class TaskController extends Controller
                     
         return response()->json($tasks);
     }
+
+    /**
+     * Delete task by id
+     * @OA\Delete (
+     *     path="/api/delete-taskbyid",
+     *     tags={"Tasks"},
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                      type="number",
+     *                      property="id",
+     *                      example="1"
+     *             )
+     *         )
+     *      )
+     * ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="success",
+     *          @OA\JsonContent(
+     *              @OA\Property(
+     *                  type="string",
+     *                  property="message",
+     *                  example="delete successfully"
+     *               ),                  
+     *          )
+     *      )
+     * )
+     */
 
     public function deleteTaskById (Request $request) {
 
@@ -148,8 +504,62 @@ class TaskController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Add task
+     * @OA\Post (
+     *     path="/api/addtask",
+     *     tags={"Tasks"},
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                      type="number",
+     *                      property="completed",
+     *                      example="1"
+     *             ),
+     *                 @OA\Property(
+     *                      type="number",
+     *                      property="important",
+     *                      example="0"
+     *             ),
+     *                 @OA\Property(
+     *                      type="string",
+     *                      property="title",
+     *                      example="taskname"
+     *             ),
+     *                 @OA\Property(
+     *                      type="string",
+     *                      property="description",
+     *                      example="day src len github"
+     *             ),
+     *                 @OA\Property(
+     *                      type="string",
+     *                      property="date",
+     *                      example="2023-06-09"
+     *             ),
+     *                 @OA\Property(
+     *                      type="string",
+     *                      property="directory",
+     *                      example="main"
+     *             ),
+     *         )
+     *      )
+     * ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="success",
+     *          @OA\JsonContent(
+     *              @OA\Property(
+     *                  type="string",
+     *                  property="message",
+     *                  example="Model created successfully"
+     *               ),                  
+     *          )
+     *      )
+     * )
+     * )
      */
+
     public function store(Request $request)
     {
         $validatedData = $request->validate([
